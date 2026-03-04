@@ -21,7 +21,7 @@ mise run build   # outputs: ~/dev/entireio/entire-cli/entire
 cd /path/to/your/project
 export ENTIRE_BIN=~/dev/entireio/entire-cli/entire
 $ENTIRE_BIN enable --agent pi --absolute-git-hook-path
-pi install git:github.com/bry-guy/pi-entire#feat/dogfood-foundation -l
+pi install git:github.com/bry-guy/pi-entire -l
 ```
 
 ### 3) Run pi

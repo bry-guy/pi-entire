@@ -8,7 +8,7 @@ fi
 
 ENTIRE_BIN="$1"
 TARGET_REPO="$2"
-EXT_SOURCE="git:github.com/bry-guy/pi-entire#feat/dogfood-foundation"
+EXT_SOURCE="git:github.com/bry-guy/pi-entire"
 
 if [[ ! -x "$ENTIRE_BIN" ]]; then
   echo "error: ENTIRE_BIN is not executable: $ENTIRE_BIN"
@@ -33,6 +33,6 @@ echo ""
 echo "  cd $TARGET_REPO"
 echo "  ENTIRE_BIN=$ENTIRE_BIN pi"
 echo ""
-echo "Tip: after branch is merged to main, install without branch pin:"
-echo "  pi remove $EXT_SOURCE -l"
-echo "  pi install git:github.com/bry-guy/pi-entire -l"
+echo "If already installed with a pinned source, you can refresh with:"
+echo "  pi remove git:github.com/bry-guy/pi-entire#feat/dogfood-foundation -l || true"
+echo "  pi install $EXT_SOURCE -l"

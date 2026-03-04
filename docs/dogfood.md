@@ -26,7 +26,7 @@ ENTIRE_BIN=~/dev/entireio/entire-cli/entire pi
 cd /path/to/target-repo
 export ENTIRE_BIN=~/dev/entireio/entire-cli/entire
 $ENTIRE_BIN enable --agent pi --absolute-git-hook-path
-pi install git:github.com/bry-guy/pi-entire#feat/dogfood-foundation -l
+pi install git:github.com/bry-guy/pi-entire -l
 ENTIRE_BIN=$ENTIRE_BIN pi
 ```
 
