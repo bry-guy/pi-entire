@@ -1,6 +1,6 @@
 {
   "name": "pi-entire",
-  "version": "0.1.0",
+  "version": "0.2.0-alpha.0",
   "description": "Entire CLI integration for pi coding agent — capture AI sessions as git-linked checkpoints",
   "keywords": ["pi-package", "pi-extension", "entire", "git", "sessions", "checkpoints"],
   "license": "MIT",
@@ -12,7 +12,20 @@
   "pi": {
     "extensions": ["./extensions"]
   },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit --pretty false",
+    "validate": "npm run lint && npm run test"
+  },
   "peerDependencies": {
     "@mariozechner/pi-coding-agent": "*"
+  },
+  "devDependencies": {
+    "@mariozechner/pi-coding-agent": "*",
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.9"
   }
 }
