@@ -1,11 +1,11 @@
 # Roadmap
 
-This extension is the **pi side** of the integration. The matching **Go agent adapter** is now implemented in a local fork of [entireio/cli](https://github.com/entireio/cli) (`~/dev/entireio/cli`, branch `feat/pi-agent-adapter`) and ready for dogfooding + upstream PR.
+This extension is the **pi side** of the integration. The matching **Go agent adapter** is now implemented in a local fork of [entireio/cli](https://github.com/entireio/cli) (`~/dev/entireio/entire-cli`, branch `feat/pi-agent-adapter`) and ready for dogfooding + upstream PR.
 
 ## Status
 
 - [x] Pi extension — maps lifecycle events to `entire hooks pi <event>` CLI calls
-- [x] Entire agent adapter implemented in local fork (`~/dev/entireio/cli`)
+- [x] Entire agent adapter implemented in local fork (`~/dev/entireio/entire-cli`)
 - [ ] Entire agent adapter merged upstream in `entireio/cli`
 
 ## Phase 1: Entire Agent Adapter (Go — contribute to entireio/cli)
@@ -102,6 +102,6 @@ A new package at `cmd/entire/cli/agent/pi/` in the Entire repo, following the pa
 
 The Entire agent adapter is now implemented in the fork. Next contribution step:
 
-1. Open a PR from `bry-guy/cli:feat/pi-agent-adapter` to `entireio/cli:main`
+1. Open a PR from `bry-guy/entire-cli:feat/pi-agent-adapter` to `entireio/cli:main`
 2. Include adapter tests and notes about pi JSONL format assumptions
 3. Reference this repo (`pi-entire`) for extension-side context

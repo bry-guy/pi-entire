@@ -19,3 +19,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - added `ENTIRE_BIN` override for local dogfooding
   - included `session_ref` and `leaf_id` in hook payloads when available
   - skipped hook emission for ephemeral (`--no-session`) runs
+- Reworked README/docs for git-based installation and zero-npm usage in dogfood mode.
+- Updated local Entire fork references to `bry-guy/entire-cli` / `~/dev/entireio/entire-cli`.

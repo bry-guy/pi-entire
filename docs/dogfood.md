@@ -2,31 +2,40 @@
 
 ## Prereqs
 
-1. Local fork of `entireio/cli` built and available on disk.
-2. `ENTIRE_BIN` exported to that local binary.
-3. Target git repo with at least one commit.
+1. Local fork binary built at `~/dev/entireio/entire-cli/entire`.
+2. Target git repo with at least one commit.
 
-## Flow
-
-You can bootstrap with:
+## Fast path
 
 ```bash
-./scripts/dogfood-local.sh /absolute/path/to/local/entire
+~/dev/pi-entire/scripts/dogfood-local.sh \
+  ~/dev/entireio/entire-cli/entire \
+  /path/to/target-repo
 ```
 
-Manual steps:
+Then run:
 
-1. `entire enable --agent pi`
-2. Start pi with local extension path:
-   - `pi --extension /path/to/pi-entire/extensions/entire.ts`
-3. Run at least 2 turns that edit files.
-4. Commit changes.
-5. Verify:
-   - `entire status` shows active session/checkpoints
-   - `entire rewind` lists checkpoints from that pi session
-   - rewind restores expected code
+```bash
+cd /path/to/target-repo
+ENTIRE_BIN=~/dev/entireio/entire-cli/entire pi
+```
 
-## Quick sanity checks
+## Manual path
 
-- Run once with `--no-session` and confirm no hooks are emitted.
-- Run once with `ENTIRE_BIN` unset and confirm warnings are user-friendly.
+```bash
+cd /path/to/target-repo
+export ENTIRE_BIN=~/dev/entireio/entire-cli/entire
+$ENTIRE_BIN enable --agent pi --absolute-git-hook-path
+pi install git:github.com/bry-guy/pi-entire#feat/dogfood-foundation -l
+ENTIRE_BIN=$ENTIRE_BIN pi
+```
+
+## Verify
+
+- `$ENTIRE_BIN status`
+- `$ENTIRE_BIN rewind`
+
+## Sanity checks
+
+- `ENTIRE_BIN=$ENTIRE_BIN pi --no-session` (hooks should be skipped)
+- unset `ENTIRE_BIN` and start pi (you should see clear warnings)
