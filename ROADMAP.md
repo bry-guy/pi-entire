@@ -1,19 +1,22 @@
 # Roadmap
 
-This extension is the **pi side** of the integration. For Entire to actually work with pi, a **Go agent adapter** needs to be contributed to the [entireio/cli](https://github.com/entireio/cli) repository. This roadmap covers both sides.
+This extension is the **pi side** of the integration. The matching **Go agent adapter** is now implemented in a local fork of [entireio/cli](https://github.com/entireio/cli) (`~/dev/entireio/entire-cli`, branch `feat/pi-agent-adapter`) and ready for dogfooding + upstream PR.
 
 ## Status
 
 - [x] Pi extension — maps lifecycle events to `entire hooks pi <event>` CLI calls
-- [ ] Entire agent adapter — teaches Entire how to read pi sessions and manage pi hooks
+- [x] Entire agent adapter implemented in local fork (`~/dev/entireio/entire-cli`)
+- [ ] Entire agent adapter merged upstream in `entireio/cli`
 
 ## Phase 1: Entire Agent Adapter (Go — contribute to entireio/cli)
 
-This is the blocking work. Without it, `entire hooks pi <event>` doesn't exist.
+This was the blocking work. It is now implemented in the local fork and needs upstreaming.
 
 ### What needs to be built
 
-A new package at `cmd/entire/cli/agent/pi/` in the Entire repo, following the pattern of the existing OpenCode adapter (`cmd/entire/cli/agent/opencode/`). The adapter needs these files:
+A new package at `cmd/entire/cli/agent/pi/` in the Entire repo, following the pattern of the existing OpenCode adapter (`cmd/entire/cli/agent/opencode/`).
+
+✅ Implemented in local fork with these files:
 
 #### `pi.go` — Agent registration
 - Implement `agent.Agent` interface
@@ -70,20 +73,20 @@ A new package at `cmd/entire/cli/agent/pi/` in the Entire repo, following the pa
 
 ## Phase 2: Testing & Refinement
 
-- [ ] Test the full loop: pi extension → Entire hooks → checkpoint creation → rewind/resume
-- [ ] Handle edge cases:
-  - Ephemeral sessions (`pi --no-session`) — skip Entire hooks
-  - Session branching (`/tree`) — how does Entire handle non-linear history?
-  - Compaction — ensure Entire captures pre-compaction state
-- [ ] Verify `entire rewind` correctly restores pi session state
-- [ ] Verify `entire resume` can reconstruct enough context for pi to continue
+- [ ] Test the full loop: pi extension → Entire hooks → checkpoint creation → rewind/resume (manual dogfood pass pending)
+- [x] Handle edge cases in code/tests:
+  - Ephemeral sessions (`pi --no-session`) — extension skips Entire hooks
+  - Session branching (`/tree`) — adapter follows active branch via `id`/`parentId`
+  - Compaction — `compaction` lifecycle hook mapped and parsed
+- [ ] Verify `entire rewind` correctly restores pi session state (manual verification pending)
+- [ ] Verify `entire resume` can reconstruct enough context for pi to continue (manual verification pending)
 
 ## Phase 3: Polish & Release
 
 - [ ] Submit PR to entireio/cli with the Go agent adapter
 - [ ] Publish pi-entire to npm as a pi package
-- [ ] Add `entire enable --agent pi` support
-- [ ] Write integration tests
+- [x] Add `entire enable --agent pi` support (implemented in local fork)
+- [ ] Write integration tests (adapter unit tests added; full integration pending)
 - [ ] Add to pi package gallery
 
 ## Phase 4: Nice-to-haves
@@ -97,11 +100,8 @@ A new package at `cmd/entire/cli/agent/pi/` in the Entire repo, following the pa
 
 ## Contributing
 
-The Entire agent adapter is the main contribution needed. If you're interested:
+The Entire agent adapter is now implemented in the fork. Next contribution step:
 
-1. Fork [entireio/cli](https://github.com/entireio/cli)
-2. Study the OpenCode adapter at `cmd/entire/cli/agent/opencode/`
-3. Create `cmd/entire/cli/agent/pi/` following the same structure
-4. Open a PR — reference this repo for the pi extension side
-
-Alternatively, open an issue on entireio/cli requesting pi agent support and link to this repo.
+1. Open a PR from `bry-guy/entire-cli:feat/pi-agent-adapter` to `entireio/cli:main`
+2. Include adapter tests and notes about pi JSONL format assumptions
+3. Reference this repo (`pi-entire`) for extension-side context

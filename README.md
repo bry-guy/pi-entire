@@ -2,48 +2,49 @@
 
 [Entire CLI](https://entire.io) integration for [pi coding agent](https://github.com/badlogic/pi-mono). Captures AI coding sessions as git-linked checkpoints — every commit gets paired with the full agent conversation that produced it.
 
-> **⚠️ Not yet functional.** This extension is the pi side of the integration. Entire doesn't have a pi agent adapter yet. See [ROADMAP.md](ROADMAP.md) for what's needed.
+> **⚠️ Local-fork dogfood mode**: upstream `entireio/cli` does not include the `pi` adapter yet. Use your forked Entire binary locally.
 
-## What this does
+## Quickstart (no npm required)
 
-When working, the full flow is:
-
-1. You use pi to write code
-2. This extension sends lifecycle events to Entire CLI (`session-start`, `turn-start`, `turn-end`, etc.)
-3. Entire captures your pi session transcript and links it to your git commits
-4. You can later `entire rewind` to a known-good checkpoint, or `entire explain` to understand why code was written a certain way
-
-## What Entire provides
-
-- **Session-to-commit linking** — every commit gets a checkpoint with the full agent conversation
-- **Rewind** — restore code to any checkpoint when the agent goes sideways
-- **Resume** — pick up where you left off with full context
-- **Clean git history** — all session metadata lives on a shadow branch (`entire/checkpoints/v1`)
-- **Zero maintenance** — hooks run automatically, no extra steps
-
-## Install
+### 1) Build your local Entire fork binary
 
 ```bash
-# Install the pi package
-pi install git:github.com/bry-guy/pi-entire
-
-# Or for development
-pi --extension ./extensions/entire.ts
+git clone git@github.com:bry-guy/entire-cli.git ~/dev/entireio/entire-cli
+cd ~/dev/entireio/entire-cli
+mise trust mise.toml
+mise run build   # outputs: ~/dev/entireio/entire-cli/entire
 ```
 
-### Prerequisites
+### 2) Enable Entire + install this extension from git in your target repo
 
-1. [Entire CLI](https://entire.io) installed:
-   ```bash
-   brew tap entireio/tap && brew install entireio/tap/entire
-   ```
+```bash
+cd /path/to/your/project
+export ENTIRE_BIN=~/dev/entireio/entire-cli/entire
+$ENTIRE_BIN enable --agent pi --absolute-git-hook-path
+pi install git:github.com/bry-guy/pi-entire#feat/dogfood-foundation -l
+```
 
-2. Entire enabled in your repo:
-   ```bash
-   cd your-project && entire enable --agent pi
-   ```
+### 3) Run pi
 
-3. **Entire pi agent adapter** — not yet available. See [ROADMAP.md](ROADMAP.md).
+```bash
+ENTIRE_BIN=~/dev/entireio/entire-cli/entire pi
+```
+
+That’s it. No npm needed to use the extension.
+
+---
+
+## One-command setup helper
+
+You can also run:
+
+```bash
+~/dev/pi-entire/scripts/dogfood-local.sh \
+  ~/dev/entireio/entire-cli/entire \
+  /path/to/your/project
+```
+
+---
 
 ## How it works
 
@@ -57,39 +58,32 @@ The extension maps pi lifecycle events to Entire CLI hook calls:
 | `session_before_compact` | `entire hooks pi compaction` | Context is being compacted |
 | `session_shutdown` | `entire hooks pi session-end` | Pi exits |
 
-Each hook call pipes a JSON payload via stdin with the session ID, prompt text, and model info. Entire's agent adapter (Go side) handles the rest — reading pi's JSONL session files, extracting modified files, and creating checkpoints.
+Hook payloads include `session_id`, `session_ref`, `leaf_id`, prompt, and model info.
 
-## Architecture
+## Local verification
 
-```
-┌─────────────┐     stdin JSON      ┌──────────────────┐
-│  pi agent   │ ──────────────────► │  entire hooks pi  │
-│  extension  │   session-start     │  <hook-name>      │
-│  (this pkg) │   turn-start        │  (Go adapter)     │
-│             │   turn-end          │                    │
-│  TypeScript │   compaction        │  Reads pi JSONL    │
-│             │   session-end       │  sessions, creates │
-│             │                     │  checkpoints       │
-└─────────────┘                     └──────────────────┘
-                                              │
-                                              ▼
-                                    ┌──────────────────┐
-                                    │  Git shadow      │
-                                    │  branch:         │
-                                    │  entire/         │
-                                    │  checkpoints/v1  │
-                                    └──────────────────┘
-```
-
-## Development
+In your target repo:
 
 ```bash
-# Test with a local pi session
-cd your-project
-pi --extension /path/to/pi-entire/extensions/entire.ts
+$ENTIRE_BIN status
+$ENTIRE_BIN rewind
 ```
 
-The extension checks for Entire CLI on startup and warns if not installed or not enabled.
+And for ephemeral behavior:
+
+```bash
+ENTIRE_BIN=~/dev/entireio/entire-cli/entire pi --no-session
+```
+
+---
+
+## Development (only if modifying this repo)
+
+```bash
+cd ~/dev/pi-entire
+npm install
+npm run validate
+```
 
 ## License
 
