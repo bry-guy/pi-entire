@@ -1,0 +1,18 @@
+{
+  "name": "pi-entire",
+  "version": "0.1.0",
+  "description": "Entire CLI integration for pi coding agent — capture AI sessions as git-linked checkpoints",
+  "keywords": ["pi-package", "pi-extension", "entire", "git", "sessions", "checkpoints"],
+  "license": "MIT",
+  "author": "bry-guy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bry-guy/pi-entire"
+  },
+  "pi": {
+    "extensions": ["./extensions"]
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-coding-agent": "*"
+  }
+}
