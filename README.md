@@ -19,7 +19,7 @@ mise run build   # outputs: ~/dev/entireio/entire-cli/entire
 
 ```bash
 cd /path/to/your/project
-export ENTIRE_BIN=~/dev/entireio/entire-cli/entire
+export ENTIRE_BIN=~/dev/entireio/entire-cli/entire   # optional if `entire` is already on PATH
 $ENTIRE_BIN enable --agent pi --absolute-git-hook-path
 pi install git:github.com/bry-guy/pi-entire -l
 ```
@@ -31,6 +31,14 @@ ENTIRE_BIN=~/dev/entireio/entire-cli/entire pi
 ```
 
 That’s it. No npm needed to use the extension.
+
+If you prefer not to export `ENTIRE_BIN`, add the folder to PATH instead:
+
+```bash
+export PATH="$HOME/dev/entireio/entire-cli:$PATH"
+entire enable --agent pi --absolute-git-hook-path
+pi
+```
 
 ---
 
